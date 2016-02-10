@@ -1,0 +1,23 @@
+{
+  "name": "jumper423/yii2-sms",
+  "description": "Приём смс сообщений",
+  "keywords": ["yii2", "sms", "api"],
+  "homepage": "https://github.com/jumper423/yii2-sms",
+  "type": "project",
+  "license": "Apache License 2.0",
+  "support": {
+    "issues": "https://github.com/jumper423/yii2-sms/issues?state=open",
+    "source": "https://github.com/jumper423/yii2-sms"
+  },
+  "minimum-stability": "stable",
+  "require": {
+    "php": ">=5.4.0",
+    "yiisoft/yii2": "*"
+  },
+  "config": {
+    "process-timeout": 1800
+  },
+  "autoload": {
+    "psr-4": {"jumper423\\": ""}
+  }
+}
