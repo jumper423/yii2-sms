@@ -47,12 +47,32 @@ class Sms extends Component
      * @return mixed
      * @throws Exception
      */
-    public function getNumbersStatus($service = null){
+    public function getNumbersStatus($service = null)
+    {
         $this->setService($service);
         $request = Json::decode($this->curl([
             'action' => 'getNumbersStatus',
         ]));
         return ArrayHelper::getValue($request, "{$this->service}_0", 0);
+    }
+
+    /**
+     * Баланс
+     * @return integer
+     * @throws Exception
+     */
+    public function getBalance()
+    {
+        $request = $this->curl([
+            'action' => 'getBalance',
+        ]);
+        list($message, $result) = implode(':', $request);
+        switch ($message) {
+            case 'ACCESS_BALANCE':
+                return $result;
+            default:
+                throw new Exception($message);
+        }
     }
 
     /**
