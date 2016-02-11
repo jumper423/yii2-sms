@@ -5,6 +5,7 @@ namespace jumper423;
 use yii\helpers\ArrayHelper;
 use yii\base\Component;
 use yii\base\Exception;
+use yii\helpers\Json;
 
 class Sms extends Component
 {
@@ -38,6 +39,20 @@ class Sms extends Component
     public function setApiKey($apiKey)
     {
         $this->apiKey = $apiKey;
+    }
+
+    /**
+     * Доступное количество номеров
+     * @param null $service
+     * @return mixed
+     * @throws Exception
+     */
+    public function getNumbersStatus($service = null){
+        $this->setService($service);
+        $request = Json::decode($this->curl([
+            'action' => 'getNumbersStatus',
+        ]));
+        return ArrayHelper::getValue($request, "{$this->service}_0", 0);
     }
 
     /**
