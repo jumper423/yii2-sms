@@ -38,7 +38,11 @@ class Sms extends Component
 
     public function setApiKey($apiKey)
     {
-        $this->apiKey = $apiKey;
+        if (is_callable($apiKey)){
+            $this->apiKey = $apiKey();
+        } else {
+            $this->apiKey = $apiKey;
+        }
     }
 
     /**
