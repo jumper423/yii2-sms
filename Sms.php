@@ -70,7 +70,7 @@ class Sms extends Component
         $request = $this->curl([
             'action' => 'getBalance',
         ]);
-        list($message, $result) = implode(':', $request);
+        list($message, $result) = explode(':', $request);
         switch ($message) {
             case 'ACCESS_BALANCE':
                 return $result;
