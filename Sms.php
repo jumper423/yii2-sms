@@ -100,8 +100,9 @@ class Sms extends Component
             list($request, $id, $number) = $result;
             switch ($request) {
                 case 'NO_NUMBERS':
-                    sleep(60);
-                    break;
+                    //sleep(60);
+                    //break;
+                    throw new Exception($request, 404);
                 case 'ACCESS_NUMBER':
                     $this->sessionId = $id;
                     $this->number = str_pad($number, 12, "+7", STR_PAD_LEFT);
