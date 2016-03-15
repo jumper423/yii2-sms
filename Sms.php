@@ -1,11 +1,12 @@
 <?php
 
-namespace jumper423;
+namespace jumper423\sms;
 
 use yii\helpers\ArrayHelper;
 use yii\base\Component;
 use yii\base\Exception;
 use yii\helpers\Json;
+use jumper423\behaviors\СallableBehavior;
 
 class Sms extends Component
 {
@@ -29,6 +30,26 @@ class Sms extends Component
     /** сообщить о том, что номер использован и отменить активацию */
     const STATUS_USED = 8;
 
+    const EVENT_INIT = 'init';
+
+    public function init()
+    {
+        parent::init();
+        $this->trigger(self::EVENT_INIT);
+    }
+
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => СallableBehavior::className(),
+                'attributes' => [
+                    self::EVENT_INIT => ['apiKey',],
+                ],
+            ],
+        ];
+    }
+
     public function setService($service = null)
     {
         if (!is_null($service)) {
@@ -38,11 +59,7 @@ class Sms extends Component
 
     public function setApiKey($apiKey)
     {
-        if (is_callable($apiKey)){
-            $this->apiKey = $apiKey();
-        } else {
-            $this->apiKey = $apiKey;
-        }
+        $this->apiKey = $apiKey;
     }
 
     /**

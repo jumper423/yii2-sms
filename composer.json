@@ -12,12 +12,13 @@
   "minimum-stability": "stable",
   "require": {
     "php": ">=5.4.0",
-    "yiisoft/yii2": "*"
+    "yiisoft/yii2": "*",
+    "jumper423/yii2-behaviors": "*"
   },
   "config": {
     "process-timeout": 1800
   },
   "autoload": {
-    "psr-4": {"jumper423\\": ""}
+    "psr-4": {"jumper423\\sms\\": ""}
   }
 }
