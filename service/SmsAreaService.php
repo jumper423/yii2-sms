@@ -4,6 +4,12 @@ namespace jumper423\sms\service;
 
 use jumper423\sms\error\SmsException;
 
+/**
+ * http://sms-area.org/
+ *
+ * Class SmsAreaService
+ * @package jumper423\sms\service
+ */
 class SmsAreaService extends SmsServiceBase
 {
     protected $sites = [

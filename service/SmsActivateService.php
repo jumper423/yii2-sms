@@ -5,6 +5,12 @@ namespace jumper423\sms\service;
 use jumper423\sms\error\SmsException;
 use yii\helpers\ArrayHelper;
 
+/**
+ * http://sms-activate.ru/
+ *
+ * Class SmsActivateService
+ * @package jumper423\sms\service
+ */
 class SmsActivateService extends SmsServiceBase
 {
     protected $sites = [
@@ -56,7 +62,7 @@ class SmsActivateService extends SmsServiceBase
             'name' => 'qw',
             'price' => 6,
         ],
-        SmsSites::GETT => [
+        SmsSites::GETTAXI => [
             'name' => 'gt',
             'price' => 4,
         ],

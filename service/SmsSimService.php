@@ -5,6 +5,12 @@ namespace jumper423\sms\service;
 use jumper423\sms\error\SmsException;
 use yii\helpers\Json;
 
+/**
+ * http://simsms.org/
+ *
+ * Class SmsSimService
+ * @package jumper423\sms\service
+ */
 class SmsSimService extends SmsServiceBase
 {
     protected $sites = [

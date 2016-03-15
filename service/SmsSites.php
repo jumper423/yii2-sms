@@ -16,7 +16,6 @@ class SmsSites
     const TWITTER = 'twitter';
     const TAXI2412 = 'taxi2412';
     const QIWI = 'qiwi';
-    const GETT = 'gett';
     const WEBMONEY = 'webmoney';
     const INSTAGRAM = 'instagram';
     const SEOSPRINT = 'seosprint';

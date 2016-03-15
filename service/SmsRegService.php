@@ -5,6 +5,12 @@ namespace jumper423\sms\service;
 use jumper423\sms\error\SmsException;
 use yii\helpers\Json;
 
+/**
+ * http://sms-reg.com/
+ *
+ * Class SmsRegService
+ * @package jumper423\sms\service
+ */
 class SmsRegService extends SmsServiceBase
 {
     protected $sites = [
@@ -156,12 +162,17 @@ class SmsRegService extends SmsServiceBase
             $result = Json::decode($result);
             if (isset($result['response']) && $result['response'] == 1) {
                 $this->sessionId = $result['tzid'];
+                $inpoll = 0;
                 while (true) {
                     $result = $this->curl('getState', ['tzid' => $this->sessionId]);
                     if (self::isJson($result)) {
                         $result = Json::decode($result);
                         switch ($result['response']) {
                             case 'TZ_INPOOL':
+                                if ($inpoll > 5) {
+                                    throw new SmsException('Не нашло номер');
+                                }
+                                $inpoll++;
                                 sleep(5);
                                 break;
                             case 'TZ_NUM_PREPARE':

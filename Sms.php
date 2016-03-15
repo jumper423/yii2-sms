@@ -2,22 +2,15 @@
 
 namespace jumper423\sms;
 
-use yii\helpers\ArrayHelper;
+use jumper423\sms\error\SmsException;
+use jumper423\sms\service\SmsServiceBase;
 use yii\base\Component;
 use yii\base\Exception;
-use yii\helpers\Json;
-use jumper423\behaviors\СallableBehavior;
 
 class Sms extends Component
 {
-    /** @var string Ключ API */
-    private $apiKey = null;
-    /** @var string Сокращение названия сервиса */
-    private $service = 'ot';
-    private $number = null;
-    private $sessionId = null;
-
-    private $href = 'http://sms-activate.ru/stubs/handler_api.php';
+    /** @var SmsServiceBase */
+    private $service;
 
     /** отменить активацию */
     const STATUS_CANCEL = -1;
@@ -30,51 +23,59 @@ class Sms extends Component
     /** сообщить о том, что номер использован и отменить активацию */
     const STATUS_USED = 8;
 
-    const EVENT_INIT = 'init';
+    /** @var SmsServiceBase[] */
+    public $services = [];
 
     public function init()
     {
         parent::init();
-        $this->trigger(self::EVENT_INIT);
-    }
-
-    public function behaviors()
-    {
-        return [
-            [
-                'class' => СallableBehavior::className(),
-                'attributes' => [
-                    self::EVENT_INIT => ['apiKey',],
-                ],
-            ],
-        ];
-    }
-
-    public function setService($service = null)
-    {
-        if (!is_null($service)) {
-            $this->service = $service;
+        $services = [];
+        foreach ($this->services as $key => $service) {
+            if (!is_object($service)) {
+                $service = \Yii::createObject($service);
+                $balance = $service->getBalance();
+                if (is_null($balance) || $balance > 0) {
+                    $services[$key] = $service;
+                }
+            }
         }
+        $this->services = $services;
     }
 
-    public function setApiKey($apiKey)
+    /**
+     * @param null|array $site
+     */
+    public function setSite($site = null)
     {
-        $this->apiKey = $apiKey;
+        if (!is_null($site)) {
+            $prices = [];
+            foreach ($this->services as $key => $service) {
+                $service->setSite($site);
+                $prices[$key] = $service->getPrice();
+            }
+            asort($prices);
+            $services = [];
+            foreach ($prices as $key => $price) {
+                $services[$key] = $this->services[$key];
+            }
+            $this->services = $services;
+        }
     }
 
     /**
      * Доступное количество номеров
-     * @param null $service
-     * @return mixed
+     * @param null|array $site
+     * @return integer
      * @throws Exception
      */
-    public function getNumbersStatus($service = null)
+    public function getNumbersStatus($site = null)
     {
-        $this->setService($service);
-        $request = Json::decode($this->curl([
-            'action' => 'getNumbersStatus',
-        ]));
-        return ArrayHelper::getValue($request, "{$this->service}_0", 0);
+        $this->setSite($site);
+        $count = 0;
+        foreach ($this->services as $service) {
+            $count += $service->getNumbersStatus();
+        }
+        return $count;
     }
 
     /**
@@ -84,142 +85,69 @@ class Sms extends Component
      */
     public function getBalance()
     {
-        $request = $this->curl([
-            'action' => 'getBalance',
-        ]);
-        list($message, $result) = explode(':', $request);
-        switch ($message) {
-            case 'ACCESS_BALANCE':
-                return $result;
-            default:
-                throw new Exception($message);
+        $balance = 0;
+        foreach ($this->services as $service) {
+            $balance += $service->getBalance();
         }
+        return $balance;
     }
 
     /**
      * Получить номер
-     * @param null $service
+     * @param null|array $site
      * @return string
-     * @throws Exception
+     * @throws SmsException
      */
-    public function getNumber($service = null)
+    public function getNumber($site = null)
     {
-        $this->setService($service);
-        $while = true;
-        while ($while) {
-            $curl = $this->curl([
-                'action' => 'getNumber',
-                'service' => $this->service,
-            ]);
-            $result = explode(':', $curl);
-            $result[] = null;
-            $result[] = null;
-            list($request, $id, $number) = $result;
-            switch ($request) {
-                case 'NO_NUMBERS':
-                    //sleep(60);
-                    //break;
-                    throw new Exception($request, 404);
-                case 'ACCESS_NUMBER':
-                    $this->sessionId = $id;
-                    $this->number = str_pad($number, 12, "+7", STR_PAD_LEFT);
-                    $while = false;
-                    break;
-                default:
-                    throw new Exception($request);
-            }
+        $this->setSite($site);
+        foreach($this->services as $service){
+            try {
+                $number = $service->getNumber();
+                $this->service = $service;
+                return $number;
+            } catch (SmsException $e) {}
         }
-        return $this->number;
+        throw new SmsException('Не нашло номер');
     }
 
     /**
      * Задаём статус
      * @param int $status
-     * @throws Exception
+     * @throws SmsException
      */
     public function setStatus($status = self::STATUS_READY)
     {
-        $request = $this->curl([
-            'action' => 'setStatus',
-            'status' => $status,
-            'id' => $this->sessionId,
-        ]);
-        switch ($request) {
-            case 'ACCESS_READY':
-            case 'ACCESS_RETRY_GET':
-            case 'ACCESS_ACTIVATION':
-            case 'ACCESS_CANCEL':
+        /** @var SmsServiceBase $service */
+        $service = $this->service;
+        switch($status){
+            case self::STATUS_CANCEL:
+                $this->service->setStatus($service::METHOD_CANCEL);
+                break;
+            case self::STATUS_COMPLETE:
+                $this->service->setStatus($service::METHOD_COMPLETE);
+                break;
+            case self::STATUS_READY:
+                $this->service->setStatus($service::METHOD_READY);
+                break;
+            case self::STATUS_INVALID:
+                $this->service->setStatus($service::METHOD_INVALID);
+                break;
+            case self::STATUS_USED:
+                $this->service->setStatus($service::METHOD_USED);
                 break;
             default:
-                throw new Exception($request, 707);
+                throw new SmsException('Нет такого статуса');
         }
     }
 
     /**
      * Получаем код
-     * @return array
-     * @throws Exception
+     * @return string
+     * @throws SmsException
      */
     public function getCode()
     {
-        $time = time();
-        while (true) {
-            if (time() - $time > 60 * 15) {
-                throw new Exception('Превышенно время ожидания смс', 300);
-            }
-            $curl = $this->curl([
-                'action' => 'getStatus',
-                'id' => $this->sessionId,
-            ]);
-            $result = explode(':', $curl);
-            $result[] = null;
-            $request = array_shift($result);
-            $code = [];
-            foreach ($result as $resultRow) {
-                $code[] = $resultRow;
-            }
-            $code = implode(':', $code);
-            switch ($request) {
-                case 'STATUS_WAIT_RETRY':
-                case 'STATUS_WAIT_CODE':
-                    sleep(30);
-                    break;
-                case 'STATUS_WAIT_RESEND':
-                    $this->setStatus(self::STATUS_COMPLETE);
-                    return ['RETURN', null];
-                case 'STATUS_OK':
-                    return ['OK', $code];
-                default:
-                    throw new Exception($request);
-            }
-        }
-    }
-
-    /**
-     * @param array $params
-     * @return string
-     * @throws Exception
-     */
-    private function curl($params = [])
-    {
-        $params = ArrayHelper::merge([
-            'api_key' => $this->apiKey,
-        ], $params);
-
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $this->href);
-        if (version_compare(PHP_VERSION, '5.5.0') >= 0) {
-            curl_setopt($ch, CURLOPT_SAFE_UPLOAD, false);
-        }
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 60);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
-        $result = curl_exec($ch);
-        if (curl_errno($ch)) {
-            throw new Exception("CURL вернул ошибку: " . curl_error($ch));
-        }
-        curl_close($ch);
-        return $result;
+        return $this->service->getCode();
     }
 }

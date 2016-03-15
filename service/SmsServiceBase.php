@@ -84,6 +84,20 @@ class SmsServiceBase extends Component
     }
 
     /**
+     * Цена
+     * @param null|array $site
+     * @return null|integer
+     */
+    public function getPrice($site = null)
+    {
+        $this->setSite($site);
+        if (isset($this->site['price'])) {
+            return $this->site['price'];
+        }
+        return null;
+    }
+
+    /**
      * Доступное количество номеров
      * @param null $site
      * @return mixed
@@ -136,7 +150,7 @@ class SmsServiceBase extends Component
 
     /**
      * Получаем код
-     * @return array
+     * @return array|void
      * @throws SmsException
      */
     public function getCode()
@@ -186,7 +200,8 @@ class SmsServiceBase extends Component
         return $result;
     }
 
-    protected static function isJson($string) {
+    protected static function isJson($string)
+    {
         json_decode($string);
         return (json_last_error() == JSON_ERROR_NONE);
     }
