@@ -4,6 +4,7 @@ namespace jumper423\sms;
 
 use jumper423\sms\error\SmsException;
 use jumper423\sms\service\SmsServiceBase;
+use jumper423\sms\service\SmsSites;
 use yii\base\Component;
 use yii\base\Exception;
 
@@ -11,6 +12,8 @@ class Sms extends Component
 {
     /** @var SmsServiceBase */
     private $service;
+
+    private $site = SmsSites::OTHER;
 
     /** отменить активацию */
     const STATUS_CANCEL = -1;
@@ -40,6 +43,7 @@ class Sms extends Component
             }
         }
         $this->services = $services;
+        $this->setSite($this->site);
     }
 
     /**
@@ -47,6 +51,7 @@ class Sms extends Component
      */
     public function setSite($site = null)
     {
+        $this->site = $site;
         if (!is_null($site)) {
             $prices = [];
             foreach ($this->services as $key => $service) {
@@ -72,8 +77,12 @@ class Sms extends Component
     {
         $this->setSite($site);
         $count = 0;
-        foreach ($this->services as $service) {
-            $count += $service->getNumbersStatus();
+        foreach ($this->services as $key => $service) {
+            try {
+                $count += $service->getNumbersStatus();
+            } catch (SmsException $e) {
+                unset($this->services[$key]);
+            }
         }
         return $count;
     }
@@ -101,12 +110,13 @@ class Sms extends Component
     public function getNumber($site = null)
     {
         $this->setSite($site);
-        foreach($this->services as $service){
+        foreach ($this->services as $service) {
             try {
                 $number = $service->getNumber();
                 $this->service = $service;
                 return $number;
-            } catch (SmsException $e) {}
+            } catch (SmsException $e) {
+            }
         }
         throw new SmsException('Не нашло номер');
     }
@@ -120,7 +130,7 @@ class Sms extends Component
     {
         /** @var SmsServiceBase $service */
         $service = $this->service;
-        switch($status){
+        switch ($status) {
             case self::STATUS_CANCEL:
                 $this->service->setStatus($service::METHOD_CANCEL);
                 break;

@@ -11,7 +11,7 @@ use jumper423\behaviors\СallableBehavior;
 class SmsServiceBase extends Component
 {
     /** @var string Ключ API */
-    protected $apiKey = null;
+    public $apiKey = null;
     /** @var string Сокращение названия сервиса */
     protected $site = SmsSites::OTHER;
     protected $number = null;
@@ -71,16 +71,11 @@ class SmsServiceBase extends Component
     {
         if (!is_null($site)) {
             if (isset($this->sites[$site])) {
-                $this->site = $site;
+                $this->site = $this->sites[$site];
             } else {
-                $this->site = SmsSites::OTHER;
+                $this->site = $this->sites[SmsSites::OTHER];
             }
         }
-    }
-
-    public function setApiKey($apiKey)
-    {
-        $this->apiKey = $apiKey;
     }
 
     /**
@@ -106,8 +101,8 @@ class SmsServiceBase extends Component
     public function getNumbersStatus($site = null)
     {
         $this->setSite($site);
-        return $this->curl(self::METHOD_GET_NUMBERS_STATUS, [
-            self::SITE => $this->site['name'],
+        return $this->curl($this::METHOD_GET_NUMBERS_STATUS, [
+            $this::SITE => $this->site['name'],
         ]);
     }
 
@@ -118,7 +113,9 @@ class SmsServiceBase extends Component
      */
     public function getBalance()
     {
-        return $this->curl(self::METHOD_GET_BALANCE);
+        return $this->curl($this::METHOD_GET_BALANCE, [
+//            $this::SITE => $this->site,
+        ]);
     }
 
     /**
@@ -130,8 +127,8 @@ class SmsServiceBase extends Component
     public function getNumber($site = null)
     {
         $this->setSite($site);
-        return $this->curl(self::METHOD_GET_NUMBER, [
-            self::SITE => $this->site['name'],
+        return $this->curl($this::METHOD_GET_NUMBER, [
+            $this::SITE => $this->site['name'],
         ]);
     }
 
@@ -141,10 +138,13 @@ class SmsServiceBase extends Component
      * @return string
      * @throws SmsException
      */
-    public function setStatus($status = self::METHOD_READY)
+    public function setStatus($status = null)
     {
+        if (is_null($status)) {
+            $status = $this::METHOD_READY;
+        }
         return $this->curl($status, [
-            self::ID => $this->sessionId,
+            $this::ID => $this->sessionId,
         ]);
     }
 
@@ -155,8 +155,8 @@ class SmsServiceBase extends Component
      */
     public function getCode()
     {
-        return $this->curl(self::METHOD_GET_STATUS, [
-            self::ID => $this->sessionId,
+        return $this->curl($this::METHOD_GET_STATUS, [
+            $this::ID => $this->sessionId,
         ]);
     }
 
@@ -180,18 +180,20 @@ class SmsServiceBase extends Component
             $method = $method['method'];
         }
         $params = ArrayHelper::merge([
-            self::API_KEY => $this->apiKey,
+            $this::API_KEY => $this->apiKey,
         ], $params);
 
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, str_replace("{method}", $method, $this->href));
-        if (version_compare(PHP_VERSION, '5.5.0') >= 0) {
-            curl_setopt($ch, CURLOPT_SAFE_UPLOAD, false);
+        if (strpos($this->href, '?') !== false) {
+            $url = str_replace("{method}", $method, $this->href) . '&' . http_build_query($params);
+        } else {
+            $url = str_replace("{method}", $method, $this->href) . '?' . http_build_query($params);
         }
+        \Yii::info($url, 'curl');
+        curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_TIMEOUT, 60);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+        curl_setopt($ch, CURLOPT_POST, false);
         $result = curl_exec($ch);
         if (curl_errno($ch)) {
             throw new Exception("CURL вернул ошибку: " . curl_error($ch));

@@ -140,7 +140,7 @@ class SmsRegService extends SmsServiceBase
     /** @inheritdoc */
     public function getBalance()
     {
-        if (!is_null($this->balance)) {
+        if (is_null($this->balance)) {
             $result = parent::getBalance();
             if (self::isJson($result)) {
                 $result = Json::decode($result);
@@ -149,7 +149,7 @@ class SmsRegService extends SmsServiceBase
                     return $this->balance;
                 }
             }
-            throw new SmsException($result);
+            throw new SmsException(Json::encode($result));
         }
         return $this->balance;
     }
@@ -179,7 +179,7 @@ class SmsRegService extends SmsServiceBase
                                 $this->number = str_pad($result['number'], 12, "+7", STR_PAD_LEFT);
                                 return $this->number;
                             default:
-                                throw new SmsException($result);
+                                throw new SmsException(Json::encode($result));
                         }
                     }
                 }
@@ -199,7 +199,7 @@ class SmsRegService extends SmsServiceBase
                     return;
                 }
             }
-            throw new SmsException($result);
+            throw new SmsException(Json::encode($result));
         }
     }
 
@@ -223,12 +223,12 @@ class SmsRegService extends SmsServiceBase
                             sleep(10);
                             break;
                         default:
-                            throw new SmsException($result);
+                            throw new SmsException(Json::encode($result));
                     }
                     continue;
                 }
             }
-            throw new SmsException($result);
+            throw new SmsException(Json::encode($result));
         }
     }
 }

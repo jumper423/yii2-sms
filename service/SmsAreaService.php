@@ -126,7 +126,7 @@ class SmsAreaService extends SmsServiceBase
     /** @inheritdoc */
     public function getBalance()
     {
-        if (!is_null($this->balance)) {
+        if (is_null($this->balance)) {
             $result = parent::getBalance();
             list($message, $result) = explode(':', $result);
             switch ($message) {

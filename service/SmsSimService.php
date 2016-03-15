@@ -177,7 +177,10 @@ class SmsSimService extends SmsServiceBase
 
     // todo проверить после пополнения баланса... потому что требует как смотрю везде передавать service
     const METHOD_GET_NUMBERS_STATUS = 'get_count';
-    const METHOD_GET_BALANCE = 'get_balance';
+    const METHOD_GET_BALANCE = [
+        'method' => 'get_balance',
+        'service' => 'opt4',
+    ];
     const METHOD_GET_NUMBER = [
         'method' => 'get_number',
         'country' => 'ru',
@@ -197,13 +200,13 @@ class SmsSimService extends SmsServiceBase
                 return $result['count'];
             }
         }
-        throw new SmsException($result);
+        throw new SmsException(Json::encode($result));
     }
 
     /** @inheritdoc */
     public function getBalance()
     {
-        if (!is_null($this->balance)) {
+        if (is_null($this->balance)) {
             $result = parent::getBalance();
             if (self::isJson($result)) {
                 $result = Json::decode($result);
@@ -212,7 +215,7 @@ class SmsSimService extends SmsServiceBase
                     return $this->balance;
                 }
             }
-            throw new SmsException($result);
+            throw new SmsException(Json::encode($result));
         }
         return $this->balance;
     }
@@ -229,7 +232,7 @@ class SmsSimService extends SmsServiceBase
                 return $this->number;
             }
         }
-        throw new SmsException($result);
+        throw new SmsException(Json::encode($result));
     }
 
     /** @inheritdoc */
@@ -243,7 +246,7 @@ class SmsSimService extends SmsServiceBase
                     return;
                 }
             }
-            throw new SmsException($result);
+            throw new SmsException(Json::encode($result));
         }
     }
 
@@ -266,12 +269,12 @@ class SmsSimService extends SmsServiceBase
                             sleep(10);
                             break;
                         default:
-                            throw new SmsException($result);
+                            throw new SmsException(Json::encode($result));
                     }
                     continue;
                 }
             }
-            throw new SmsException($result);
+            throw new SmsException(Json::encode($result));
         }
     }
 }
