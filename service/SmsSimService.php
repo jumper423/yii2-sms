@@ -196,8 +196,10 @@ class SmsSimService extends SmsServiceBase
         $result = parent::getNumbersStatus($site);
         if (self::isJson($result)) {
             $result = Json::decode($result);
-            if (isset($result['count'])) {
-                return $result['count'];
+            foreach ($result as $key => $value) {
+                if (strpos($key, 'counts') !== false) {
+                    return $value;
+                }
             }
         }
         throw new SmsException(Json::encode($result));
