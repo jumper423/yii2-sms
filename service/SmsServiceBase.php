@@ -27,6 +27,7 @@ class SmsServiceBase extends Component
     const ID = 'id';
     const SITE = 'service';
     const NUMBER = 'number';
+    const ALIAS = null;
 
     /** Количества доступных номеров */
     const METHOD_GET_NUMBERS_STATUS = null;
@@ -101,9 +102,11 @@ class SmsServiceBase extends Component
     public function getNumbersStatus($site = null)
     {
         $this->setSite($site);
-        return $this->curl($this::METHOD_GET_NUMBERS_STATUS, [
-            $this::SITE => $this->site['name'],
-        ]);
+        $params = [$this::SITE => $this->site['name']];
+        if (!is_null($this::ALIAS) && isset($this->site['alias'])) {
+            $params[$this::ALIAS] = $this->site['alias'];
+        }
+        return $this->curl($this::METHOD_GET_NUMBERS_STATUS, $params);
     }
 
     /**
