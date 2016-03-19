@@ -160,6 +160,7 @@ class SmsServiceBase extends Component
     {
         return $this->curl($this::$METHOD_GET_STATUS, [
             $this::ID => $this->sessionId,
+            $this::SITE => $this->site['name'],
         ]);
     }
 
