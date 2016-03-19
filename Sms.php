@@ -34,13 +34,15 @@ class Sms extends Component
         parent::init();
         $services = [];
         foreach ($this->services as $key => $service) {
-            if (!is_object($service)) {
-                $service = \Yii::createObject($service);
-                $balance = $service->getBalance();
-                if (is_null($balance) || $balance > 0) {
-                    $services[$key] = $service;
+            try {
+                if (!is_object($service)) {
+                    $service = \Yii::createObject($service);
+                    $balance = $service->getBalance();
+                    if (is_null($balance) || $balance > 0) {
+                        $services[$key] = $service;
+                    }
                 }
-            }
+            } catch (SmsException $e){}
         }
         $this->services = $services;
         $this->setSite($this->site);
