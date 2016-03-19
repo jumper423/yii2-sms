@@ -128,7 +128,10 @@ class SmsAreaService extends SmsServiceBase
     {
         if (is_null($this->balance)) {
             $result = parent::getBalance();
-            list($message, $result) = explode(':', $result);
+            $result = explode(':', $result);
+            $result[] = null;
+            $result[] = null;
+            list($message, $result) = $result;
             switch ($message) {
                 case 'ACCESS_BALANCE':
                     $this->balance = $result;
