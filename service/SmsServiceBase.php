@@ -143,12 +143,17 @@ class SmsServiceBase extends Component
      */
     public function setStatus($status = null)
     {
-        if (is_null($status)) {
-            $status = $this::$METHOD_READY;
+        if ($this->site) {
+            if (is_null($status)) {
+                $status = $this::$METHOD_READY;
+            }
+            return $this->curl($status, [
+                $this::ID => $this->sessionId,
+                $this::SITE => $this->site['name'],
+            ]);
+        } else {
+            return null;
         }
-        return $this->curl($status, [
-            $this::ID => $this->sessionId,
-        ]);
     }
 
     /**
