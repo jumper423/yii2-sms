@@ -223,6 +223,7 @@ class SmsSimService extends SmsServiceBase
     public static $METHOD_GET_NUMBER = [
         'method' => 'get_number',
         'country' => 'ru',
+        'id' => 1,
     ];
     public static $METHOD_CANCEL = 'denial';
     public static $METHOD_INVALID = 'get_proverka';
