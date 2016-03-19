@@ -130,26 +130,28 @@ class Sms extends Component
      */
     public function setStatus($status = self::STATUS_READY)
     {
-        /** @var SmsServiceBase $service */
-        $service = $this->service;
-        switch ($status) {
-            case self::STATUS_CANCEL:
-                $this->service->setStatus($service::$METHOD_CANCEL);
-                break;
-            case self::STATUS_COMPLETE:
-                $this->service->setStatus($service::$METHOD_COMPLETE);
-                break;
-            case self::STATUS_READY:
-                $this->service->setStatus($service::$METHOD_READY);
-                break;
-            case self::STATUS_INVALID:
-                $this->service->setStatus($service::$METHOD_INVALID);
-                break;
-            case self::STATUS_USED:
-                $this->service->setStatus($service::$METHOD_USED);
-                break;
-            default:
-                throw new SmsException('Нет такого статуса');
+        if (is_object($this->service)) {
+            /** @var SmsServiceBase $service */
+            $service = $this->service;
+            switch ($status) {
+                case self::STATUS_CANCEL:
+                    $this->service->setStatus($service::$METHOD_CANCEL);
+                    break;
+                case self::STATUS_COMPLETE:
+                    $this->service->setStatus($service::$METHOD_COMPLETE);
+                    break;
+                case self::STATUS_READY:
+                    $this->service->setStatus($service::$METHOD_READY);
+                    break;
+                case self::STATUS_INVALID:
+                    $this->service->setStatus($service::$METHOD_INVALID);
+                    break;
+                case self::STATUS_USED:
+                    $this->service->setStatus($service::$METHOD_USED);
+                    break;
+                default:
+                    throw new SmsException('Нет такого статуса');
+            }
         }
     }
 
