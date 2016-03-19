@@ -214,8 +214,8 @@ class SmsRegService extends SmsServiceBase
             $result = parent::getCode();
             if (self::isJson($result)) {
                 $result = Json::decode($result);
-                if (isset($result['responce'])) {
-                    switch ($result['responce']) {
+                if (isset($result['response'])) {
+                    switch ($result['response']) {
                         case 'TZ_NUM_ANSWER' :
                         case 'TZ_NUM_ANSWER2' :
                             return $result['sms'];
