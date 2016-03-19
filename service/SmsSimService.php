@@ -303,8 +303,8 @@ class SmsSimService extends SmsServiceBase
             $result = parent::getCode();
             if (self::isJson($result)) {
                 $result = Json::decode($result);
-                if (isset($result['responce'])) {
-                    switch ($result['responce']) {
+                if (isset($result['response'])) {
+                    switch ($result['response']) {
                         case 1 :
                             return $result['sms'];
                         case 2:
