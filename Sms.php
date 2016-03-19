@@ -162,6 +162,7 @@ class Sms extends Component
      */
     public function getCode()
     {
+        //todo не сделан reset
         return $this->service->getCode();
     }
 }
