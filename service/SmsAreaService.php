@@ -93,29 +93,29 @@ class SmsAreaService extends SmsServiceBase
     const SITE = 'service';
     const NUMBER = 'number';
 
-    const METHOD_GET_BALANCE = 'getBalance';
-    const METHOD_GET_NUMBER = [
+    public static $METHOD_GET_BALANCE = 'getBalance';
+    public static $METHOD_GET_NUMBER = [
         'method' => 'getNumber',
         'country' => 'ru',
     ];
-    const METHOD_READY = [
+    public static $METHOD_READY = [
         'method' => 'setStatus',
         'status' => 1,
     ];
-    const METHOD_CANCEL = [
+    public static $METHOD_CANCEL = [
         'method' => 'setStatus',
         'status' => -1,
     ];
-    const METHOD_INVALID = 'getRepeat';
-    const METHOD_COMPLETE = [
+    public static $METHOD_INVALID = 'getRepeat';
+    public static $METHOD_COMPLETE = [
         'method' => 'setStatus',
         'status' => 6,
     ];
-    const METHOD_USED = [
+    public static $METHOD_USED = [
         'method' => 'setStatus',
         'status' => 10,
     ];
-    const METHOD_GET_STATUS = 'getStatus';
+    public static $METHOD_GET_STATUS = 'getStatus';
 
     /** @inheritdoc */
     public function getNumbersStatus()
@@ -162,7 +162,7 @@ class SmsAreaService extends SmsServiceBase
     }
 
     /** @inheritdoc */
-    public function setStatus($status = self::METHOD_READY)
+    public function setStatus($status = null)
     {
         $result = parent::setStatus($status);
         $result = explode(':', $result);
@@ -209,7 +209,7 @@ class SmsAreaService extends SmsServiceBase
                     sleep(10);
                     break;
                 case 'STATUS_WAIT_RESEND':
-                    $this->setStatus(self::METHOD_COMPLETE);
+                    $this->setStatus(self::$METHOD_COMPLETE);
                     return ['RETURN', null];
                 case 'STATUS_OK':
                 case 'STATUS_ACCESS':

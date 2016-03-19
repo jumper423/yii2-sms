@@ -215,19 +215,19 @@ class SmsSimService extends SmsServiceBase
     const ALIAS = 'service_id';
 
     // todo проверить после пополнения баланса... потому что требует как смотрю везде передавать service
-    const METHOD_GET_NUMBERS_STATUS = 'get_count';
-    const METHOD_GET_BALANCE = [
+    public static $METHOD_GET_NUMBERS_STATUS = 'get_count';
+    public static $METHOD_GET_BALANCE = [
         'method' => 'get_balance',
         'service' => 'opt0',
     ];
-    const METHOD_GET_NUMBER = [
+    public static $METHOD_GET_NUMBER = [
         'method' => 'get_number',
         'country' => 'ru',
     ];
-    const METHOD_CANCEL = 'denial';
-    const METHOD_INVALID = 'get_proverka';
-    const METHOD_USED = 'ban';
-    const METHOD_GET_STATUS = 'get_sms';
+    public static $METHOD_CANCEL = 'denial';
+    public static $METHOD_INVALID = 'get_proverka';
+    public static $METHOD_USED = 'ban';
+    public static $METHOD_GET_STATUS = 'get_sms';
 
     /** @inheritdoc */
     public function getNumbersStatus($site = null)
@@ -277,7 +277,7 @@ class SmsSimService extends SmsServiceBase
     }
 
     /** @inheritdoc */
-    public function setStatus($status = self::METHOD_READY)
+    public function setStatus($status = null)
     {
         $result = parent::setStatus($status);
         if (!is_null($result)) {

@@ -30,23 +30,23 @@ class SmsServiceBase extends Component
     const ALIAS = null;
 
     /** Количества доступных номеров */
-    const METHOD_GET_NUMBERS_STATUS = null;
+    public static $METHOD_GET_NUMBERS_STATUS = null;
     /** Баланс */
-    const METHOD_GET_BALANCE = null;
+    public static $METHOD_GET_BALANCE = null;
     /** Заказ номера */
-    const METHOD_GET_NUMBER = null;
+    public static $METHOD_GET_NUMBER = null;
     /** сообщить о готовности номера (смс на номер отправлено) */
-    const METHOD_READY = null;
+    public static $METHOD_READY = null;
     /** отменить активацию */
-    const METHOD_CANCEL = null;
+    public static $METHOD_CANCEL = null;
     /** запросить еще один код (бесплатно) */
-    const METHOD_INVALID = null;
+    public static $METHOD_INVALID = null;
     /** завершить активацию(если был статус "код получен" - помечает успешно и завершает, если был "подготовка" - удаляет и помечает ошибка, если был статус "ожидает повтора" - переводит активацию в ожидание смс) */
-    const METHOD_COMPLETE = null;
+    public static $METHOD_COMPLETE = null;
     /** сообщить о том, что номер использован и отменить активацию */
-    const METHOD_USED = null;
+    public static $METHOD_USED = null;
     /** получает статус */
-    const METHOD_GET_STATUS = null;
+    public static $METHOD_GET_STATUS = null;
 
     const EVENT_INIT = 'init';
 
@@ -106,7 +106,7 @@ class SmsServiceBase extends Component
         if (!is_null($this::ALIAS) && isset($this->site['alias'])) {
             $params[$this::ALIAS] = $this->site['alias'];
         }
-        return $this->curl($this::METHOD_GET_NUMBERS_STATUS, $params);
+        return $this->curl($this::$METHOD_GET_NUMBERS_STATUS, $params);
     }
 
     /**
@@ -116,7 +116,7 @@ class SmsServiceBase extends Component
      */
     public function getBalance()
     {
-        return $this->curl($this::METHOD_GET_BALANCE, [
+        return $this->curl($this::$METHOD_GET_BALANCE, [
 //            $this::SITE => $this->site,
         ]);
     }
@@ -130,7 +130,7 @@ class SmsServiceBase extends Component
     public function getNumber($site = null)
     {
         $this->setSite($site);
-        return $this->curl($this::METHOD_GET_NUMBER, [
+        return $this->curl($this::$METHOD_GET_NUMBER, [
             $this::SITE => $this->site['name'],
         ]);
     }
@@ -144,7 +144,7 @@ class SmsServiceBase extends Component
     public function setStatus($status = null)
     {
         if (is_null($status)) {
-            $status = $this::METHOD_READY;
+            $status = $this::$METHOD_READY;
         }
         return $this->curl($status, [
             $this::ID => $this->sessionId,
@@ -158,7 +158,7 @@ class SmsServiceBase extends Component
      */
     public function getCode()
     {
-        return $this->curl($this::METHOD_GET_STATUS, [
+        return $this->curl($this::$METHOD_GET_STATUS, [
             $this::ID => $this->sessionId,
         ]);
     }

@@ -119,17 +119,17 @@ class SmsRegService extends SmsServiceBase
     const SITE = 'service';
     const NUMBER = 'number';
 
-    const METHOD_GET_BALANCE = 'getBalance';
-    const METHOD_GET_NUMBER = [
+    public static $METHOD_GET_BALANCE = 'getBalance';
+    public static $METHOD_GET_NUMBER = [
         'method' => 'getNum',
         'country' => 'ru',
         'appid' => 'Заполнить потом', //todo подать заявку http://sms-reg.com/ui.php?action=dev
     ];
-    const METHOD_READY = 'setReady';
-    const METHOD_INVALID = 'getNumRepeat';
-    const METHOD_COMPLETE = 'setOperationOk';
-    const METHOD_USED = 'setOperationUsed';
-    const METHOD_GET_STATUS = 'getState';
+    public static $METHOD_READY = 'setReady';
+    public static $METHOD_INVALID = 'getNumRepeat';
+    public static $METHOD_COMPLETE = 'setOperationOk';
+    public static $METHOD_USED = 'setOperationUsed';
+    public static $METHOD_GET_STATUS = 'getState';
 
     /** @inheritdoc */
     public function getNumbersStatus($site = null)
@@ -189,7 +189,7 @@ class SmsRegService extends SmsServiceBase
     }
 
     /** @inheritdoc */
-    public function setStatus($status = self::METHOD_READY)
+    public function setStatus($status = null)
     {
         $result = parent::setStatus($status);
         if (!is_null($result)) {

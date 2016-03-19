@@ -132,19 +132,19 @@ class Sms extends Component
         $service = $this->service;
         switch ($status) {
             case self::STATUS_CANCEL:
-                $this->service->setStatus($service::METHOD_CANCEL);
+                $this->service->setStatus($service::$METHOD_CANCEL);
                 break;
             case self::STATUS_COMPLETE:
-                $this->service->setStatus($service::METHOD_COMPLETE);
+                $this->service->setStatus($service::$METHOD_COMPLETE);
                 break;
             case self::STATUS_READY:
-                $this->service->setStatus($service::METHOD_READY);
+                $this->service->setStatus($service::$METHOD_READY);
                 break;
             case self::STATUS_INVALID:
-                $this->service->setStatus($service::METHOD_INVALID);
+                $this->service->setStatus($service::$METHOD_INVALID);
                 break;
             case self::STATUS_USED:
-                $this->service->setStatus($service::METHOD_USED);
+                $this->service->setStatus($service::$METHOD_USED);
                 break;
             default:
                 throw new SmsException('Нет такого статуса');
