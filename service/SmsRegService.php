@@ -195,7 +195,7 @@ class SmsRegService extends SmsServiceBase
         if (!is_null($result)) {
             if (self::isJson($result)) {
                 $result = Json::decode($result);
-                if (isset($result['responce']) && $result['responce'] == 1) {
+                if (isset($result['response']) && $result['response'] == 1) {
                     return;
                 }
             }
