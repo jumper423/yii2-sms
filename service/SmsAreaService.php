@@ -118,7 +118,7 @@ class SmsAreaService extends SmsServiceBase
     public static $METHOD_GET_STATUS = 'getStatus';
 
     /** @inheritdoc */
-    public function getNumbersStatus()
+    public function getNumbersStatus($site = null)
     {
         return null;
     }
@@ -209,7 +209,7 @@ class SmsAreaService extends SmsServiceBase
                     sleep(10);
                     break;
                 case 'STATUS_WAIT_RESEND':
-                    $this->setStatus(self::$METHOD_COMPLETE);
+                    $this->setStatus($this::$METHOD_COMPLETE);
                     return ['RETURN', null];
                 case 'STATUS_OK':
                 case 'STATUS_ACCESS':
