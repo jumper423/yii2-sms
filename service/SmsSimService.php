@@ -288,7 +288,8 @@ class SmsSimService extends SmsServiceBase
                     return;
                 }
             }
-            throw new SmsException(Json::encode($result));
+            return;
+            //throw new SmsException(Json::encode($result));
         }
     }
 
