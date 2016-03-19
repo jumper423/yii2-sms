@@ -157,7 +157,7 @@ class Sms extends Component
 
     /**
      * Получаем код
-     * @return string
+     * @return array
      * @throws SmsException
      */
     public function getCode()

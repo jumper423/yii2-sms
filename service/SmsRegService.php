@@ -209,7 +209,8 @@ class SmsRegService extends SmsServiceBase
         $time = time();
         while (true) {
             if (time() - $time > 60 * 9.5) {
-                throw new SmsException('Превышенно время ожидания смс', 300);
+                return [false, null];
+                //throw new SmsException('Превышенно время ожидания смс', 300);
             }
             $result = parent::getCode();
             if (self::isJson($result)) {
@@ -218,17 +219,19 @@ class SmsRegService extends SmsServiceBase
                     switch ($result['response']) {
                         case 'TZ_NUM_ANSWER' :
                         case 'TZ_NUM_ANSWER2' :
-                            return $result['sms'];
+                            return [true, $result['sms']];
                         case 'TZ_NUM_WAIT':
                             sleep(10);
                             break;
                         default:
-                            throw new SmsException(Json::encode($result));
+                            return [false, null];
+                            //throw new SmsException(Json::encode($result));
                     }
                     continue;
                 }
             }
-            throw new SmsException(Json::encode($result));
+            return [false, null];
+            //throw new SmsException(Json::encode($result));
         }
     }
 }

@@ -217,7 +217,8 @@ class SmsActivateService extends SmsServiceBase
         $time = time();
         while (true) {
             if (time() - $time > 60 * 15) {
-                throw new SmsException('Превышенно время ожидания смс', 300);
+                return [false, null];
+                //throw new SmsException('Превышенно время ожидания смс', 300);
             }
             $result = parent::getCode();
             $result = explode(':', $result);
@@ -234,12 +235,14 @@ class SmsActivateService extends SmsServiceBase
                     sleep(10);
                     break;
                 case 'STATUS_WAIT_RESEND':
-                    $this->setStatus(self::$METHOD_COMPLETE);
-                    return ['RETURN', null];
+                    return [false, null];
+                    //$this->setStatus(self::$METHOD_COMPLETE);
+                    //return ['RETURN', null];
                 case 'STATUS_OK':
-                    return ['OK', $code];
+                    return [true, $code];
                 default:
-                    throw new SmsException($request);
+                    return [false, null];
+                    //throw new SmsException($request);
             }
         }
     }

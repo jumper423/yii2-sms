@@ -298,7 +298,8 @@ class SmsSimService extends SmsServiceBase
         $time = time();
         while (true) {
             if (time() - $time > 60 * 9.5) {
-                throw new SmsException('Превышенно время ожидания смс', 300);
+                return [false, null];
+                //throw new SmsException('Превышенно время ожидания смс', 300);
             }
             $result = parent::getCode();
             if (self::isJson($result)) {
@@ -306,7 +307,7 @@ class SmsSimService extends SmsServiceBase
                 if (isset($result['response'])) {
                     switch ($result['response']) {
                         case 1 :
-                            return $result['sms'];
+                            return [true, $result['sms']];
                         case 2:
                             sleep(10);
                             break;
