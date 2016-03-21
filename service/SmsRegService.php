@@ -185,7 +185,7 @@ class SmsRegService extends SmsServiceBase
                 }
             }
         }
-        throw new SmsException($result);
+        throw new SmsException(Json::encode($result));
     }
 
     /** @inheritdoc */
@@ -225,7 +225,7 @@ class SmsRegService extends SmsServiceBase
                             break;
                         default:
                             return [false, null];
-                            //throw new SmsException(Json::encode($result));
+                        //throw new SmsException(Json::encode($result));
                     }
                     continue;
                 }
