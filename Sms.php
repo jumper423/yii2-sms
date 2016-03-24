@@ -42,7 +42,8 @@ class Sms extends Component
                         $services[$key] = $service;
                     }
                 }
-            } catch (SmsException $e){}
+            } catch (SmsException $e) {
+            }
         }
         $this->services = $services;
         $this->setSite($this->site);
@@ -98,7 +99,10 @@ class Sms extends Component
     {
         $balance = 0;
         foreach ($this->services as $service) {
-            $balance += $service->getBalance();
+            try {
+                $balance += $service->getBalance();
+            } catch (SmsException $e) {
+            }
         }
         return $balance;
     }
