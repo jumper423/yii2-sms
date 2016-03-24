@@ -5,7 +5,6 @@ namespace jumper423\sms\service;
 use jumper423\sms\error\SmsException;
 use yii\helpers\ArrayHelper;
 use yii\base\Component;
-use yii\base\Exception;
 use jumper423\behaviors\СallableBehavior;
 
 class SmsServiceBase extends Component
@@ -173,7 +172,7 @@ class SmsServiceBase extends Component
      * @param $method
      * @param array $params
      * @return mixed|null
-     * @throws Exception
+     * @throws SmsException
      */
     protected function curl($method, $params = [])
     {
@@ -205,7 +204,7 @@ class SmsServiceBase extends Component
         curl_setopt($ch, CURLOPT_POST, false);
         $result = curl_exec($ch);
         if (curl_errno($ch)) {
-            throw new Exception("CURL вернул ошибку: " . curl_error($ch));
+            throw new SmsException("CURL вернул ошибку: " . curl_error($ch));
         }
         curl_close($ch);
         return $result;
