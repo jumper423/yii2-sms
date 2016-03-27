@@ -265,16 +265,26 @@ class SmsSimService extends SmsServiceBase
     /** @inheritdoc */
     public function getNumber($site = null)
     {
-        $result = parent::getNumber($site);
-        if (self::isJson($result)) {
-            $result = Json::decode($result);
-            if (isset($result['number']) && $result['number'] && isset($result['id']) && $result['id'] > 0) {
-                $this->sessionId = $result['id'];
-                $this->number = str_pad($result['number'], 12, "+7", STR_PAD_LEFT);
-                return $this->number;
+        if ($this->getNumbersStatus()) {
+            $time = time();
+            while (time() - $time < 60 * 3) {
+                $result = parent::getNumber($site);
+                if (self::isJson($result)) {
+                    $result = Json::decode($result);
+                    if (isset($result['response']) && $result['response'] == 1 && isset($result['number']) && $result['number'] && isset($result['id']) && $result['id'] > 0) {
+                        $this->sessionId = $result['id'];
+                        $this->number = str_pad($result['number'], 12, "+7", STR_PAD_LEFT);
+                        return $this->number;
+                    }
+                    if (isset($result['response']) && $result['response'] == 2) {
+                        continue;
+                    }
+                }
+                throw new SmsException(Json::encode($result));
             }
+            throw new SmsException('Время поиска номеров истекло');
         }
-        throw new SmsException(Json::encode($result));
+        throw new SmsException('Нет номеров');
     }
 
     /** @inheritdoc */
