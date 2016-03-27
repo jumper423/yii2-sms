@@ -266,6 +266,7 @@ class SmsSimService extends SmsServiceBase
     public function getNumber($site = null)
     {
         if ($this->getNumbersStatus()) {
+            sleep(1);
             $time = time();
             while (time() - $time < 60 * 3) {
                 $result = parent::getNumber($site);
