@@ -277,6 +277,7 @@ class SmsSimService extends SmsServiceBase
                         return $this->number;
                     }
                     if (isset($result['response']) && $result['response'] == 2) {
+                        sleep(10);
                         continue;
                     }
                 }
