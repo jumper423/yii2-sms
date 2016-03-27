@@ -266,9 +266,9 @@ class SmsSimService extends SmsServiceBase
     public function getNumber($site = null)
     {
         if ($this->getNumbersStatus()) {
-            sleep(1);
             $time = time();
             while (time() - $time < 60 * 3) {
+                sleep(10);
                 $result = parent::getNumber($site);
                 if (self::isJson($result)) {
                     $result = Json::decode($result);
@@ -278,7 +278,6 @@ class SmsSimService extends SmsServiceBase
                         return $this->number;
                     }
                     if (isset($result['response']) && $result['response'] == 2) {
-                        sleep(10);
                         continue;
                     }
                 }
