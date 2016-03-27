@@ -163,10 +163,10 @@ class SmsActivateService extends SmsServiceBase
             $result = explode(':', $result);
             $result[] = null;
             $result[] = null;
-            list($message, $result) = $result;
+            list($message, $value) = $result;
             switch ($message) {
                 case 'ACCESS_BALANCE':
-                    $this->balance = $result;
+                    $this->balance = $value;
                     return $this->balance;
                 default:
                     throw new SmsException($message);
