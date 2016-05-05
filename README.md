@@ -3,6 +3,14 @@
 
 Компонент позволяет объединить несколько сервисов по приёму смс сообщений.
 
+Сервисы
+-----------
+На данные момент разработано api для сервисов
+* [Sim Sms](http://simsms.org)
+* [Sms Activate](http://sms-activate.ru)
+* [Sms-Area](http://sms-area.org/signup.php?referrer=NjE4Mjk=)
+* [Sms-Reg](http://sms-reg.com)
+
 Особенности
 ------------
 * Сразу несколько сервисов по приёму смс сообщений
