@@ -25,23 +25,23 @@ class Sms extends Component
     /**
      * @status отменить активацию
      */
-    const STATUS_CANCEL = -1;
+    const STATUS_CANCEL = 'cancel';
     /**
      * @status сообщить о готовности номера (смс на номер отправлено)
      */
-    const STATUS_READY = 1;
+    const STATUS_READY = 'ready';
     /**
      * @status сообщить о неверном коде
      */
-    const STATUS_INVALID = 3;
+    const STATUS_INVALID = 'invalid';
     /**
      * @status завершить активацию(если был статус "код получен" - помечает успешно и завершает, если был "подготовка" - удаляет и помечает ошибка, если был статус "ожидает повтора" - переводит активацию в ожидание смс)
      */
-    const STATUS_COMPLETE = 6;
+    const STATUS_COMPLETE = 'complete';
     /**
      * @status сообщить о том, что номер использован и отменить активацию
      */
-    const STATUS_USED = 8;
+    const STATUS_USED = 'used';
 
     /**
      * @event Событие перед получением номера
