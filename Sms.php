@@ -8,25 +8,54 @@ use jumper423\sms\service\SmsSites;
 use yii\base\Component;
 use yii\base\Exception;
 
+/**
+ * Class Sms
+ * @package jumper423\sms
+ */
 class Sms extends Component
 {
     /** @var SmsServiceBase */
     private $service;
 
+    /**
+     * @var string Сайт
+     */
     private $site = SmsSites::OTHER;
 
-    /** отменить активацию */
+    /**
+     * @status отменить активацию
+     */
     const STATUS_CANCEL = -1;
-    /** сообщить о готовности номера (смс на номер отправлено) */
+    /**
+     * @status сообщить о готовности номера (смс на номер отправлено)
+     */
     const STATUS_READY = 1;
-    /** сообщить о неверном коде */
+    /**
+     * @status сообщить о неверном коде
+     */
     const STATUS_INVALID = 3;
-    /** завершить активацию(если был статус "код получен" - помечает успешно и завершает, если был "подготовка" - удаляет и помечает ошибка, если был статус "ожидает повтора" - переводит активацию в ожидание смс) */
+    /**
+     * @status завершить активацию(если был статус "код получен" - помечает успешно и завершает, если был "подготовка" - удаляет и помечает ошибка, если был статус "ожидает повтора" - переводит активацию в ожидание смс)
+     */
     const STATUS_COMPLETE = 6;
-    /** сообщить о том, что номер использован и отменить активацию */
+    /**
+     * @status сообщить о том, что номер использован и отменить активацию
+     */
     const STATUS_USED = 8;
 
-    /** @var SmsServiceBase[] */
+    /**
+     * @event Событие перед получением номера
+     */
+    const EVENT_BEFORE_NUMBER = 'beforeNumber';
+    /**
+     * @event Событие после получением номера
+     */
+    const EVENT_AFTER_NUMBER = 'afterNumber';
+
+    /**
+     * Сервисы по приёму смс
+     * @var SmsServiceBase[]
+     */
     public $services = [];
 
     public function init()
@@ -50,6 +79,7 @@ class Sms extends Component
     }
 
     /**
+     * Выбираем с какого сайта будут приходить смс сообщения
      * @param null|array $site
      */
     public function setSite($site = null)
@@ -115,11 +145,13 @@ class Sms extends Component
      */
     public function getNumber($site = null)
     {
+        $this->trigger(self::EVENT_BEFORE_NUMBER);
         $this->setSite($site);
         foreach ($this->services as $service) {
             try {
                 $number = $service->getNumber();
                 $this->service = $service;
+                $this->trigger(self::EVENT_AFTER_NUMBER);
                 return $number;
             } catch (SmsException $e) {
             }

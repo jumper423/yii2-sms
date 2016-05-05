@@ -2,6 +2,12 @@
 
 namespace jumper423\sms\service;
 
+/**
+ * Сайты
+ *
+ * Class SmsSites
+ * @package jumper423\sms\service
+ */
 class SmsSites
 {
     const VKONTAKTE = 'vkontakte';
