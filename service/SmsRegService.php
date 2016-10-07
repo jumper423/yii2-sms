@@ -123,7 +123,7 @@ class SmsRegService extends SmsServiceBase
     public static $METHOD_GET_NUMBER = [
         'method' => 'getNum',
         'country' => 'ru',
-        'appid' => 'Заполнить потом', //todo подать заявку http://sms-reg.com/ui.php?action=dev
+        'appid' => 'MIINB18XS6AHADFK',
     ];
     public static $METHOD_READY = 'setReady';
     public static $METHOD_INVALID = 'getNumRepeat';
