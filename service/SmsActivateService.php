@@ -129,22 +129,27 @@ class SmsActivateService extends SmsServiceBase
     public static $METHOD_READY = [
         'method' => 'setStatus',
         'status' => 1,
+        'ref' => 'yii2sms',
     ];
     public static $METHOD_CANCEL = [
         'method' => 'setStatus',
         'status' => -1,
+        'ref' => 'yii2sms',
     ];
     public static $METHOD_INVALID = [
         'method' => 'setStatus',
         'status' => 3,
+        'ref' => 'yii2sms',
     ];
     public static $METHOD_COMPLETE = [
         'method' => 'setStatus',
         'status' => 6,
+        'ref' => 'yii2sms',
     ];
     public static $METHOD_USED = [
         'method' => 'setStatus',
         'status' => 8,
+        'ref' => 'yii2sms',
     ];
     public static $METHOD_GET_STATUS = 'getStatus';
 
