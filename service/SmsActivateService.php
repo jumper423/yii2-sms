@@ -123,9 +123,18 @@ class SmsActivateService extends SmsServiceBase
     const SITE = 'service';
     const NUMBER = 'number';
 
-    public static $METHOD_GET_NUMBERS_STATUS = 'getNumbersStatus';
-    public static $METHOD_GET_BALANCE = 'getBalance';
-    public static $METHOD_GET_NUMBER = 'getNumber';
+    public static $METHOD_GET_NUMBERS_STATUS = [
+        'method' => 'getNumbersStatus',
+        'ref' => 'yii2sms',
+    ];
+    public static $METHOD_GET_BALANCE = [
+        'method' => 'getBalance',
+        'ref' => 'yii2sms',
+    ];
+    public static $METHOD_GET_NUMBER = [
+        'method' => 'getNumber',
+        'ref' => 'yii2sms',
+    ];
     public static $METHOD_READY = [
         'method' => 'setStatus',
         'status' => 1,
@@ -151,7 +160,10 @@ class SmsActivateService extends SmsServiceBase
         'status' => 8,
         'ref' => 'yii2sms',
     ];
-    public static $METHOD_GET_STATUS = 'getStatus';
+    public static $METHOD_GET_STATUS = [
+        'method' => 'getStatus',
+        'ref' => 'yii2sms',
+    ];
 
     /** @inheritdoc */
     public function getNumbersStatus($site = null)
