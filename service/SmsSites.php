@@ -60,5 +60,11 @@ class SmsSites
     const VOXOX = 'VOXOX';
     const MASTERCARD = 'MasterCard';
     const PREMIA_RUNETA = 'PremiaRuneta';
+    const WECHAT = 'WeChat';
+    const UBER = 'Uber';
+    const OLX = 'OLX';
+    const OIM = 'Open I messenger';
+    const IMO = 'IMO messenger';
+    const LM = 'Line messenger';
     const OTHER = 'other';
 }

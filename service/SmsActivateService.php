@@ -16,15 +16,15 @@ class SmsActivateService extends SmsServiceBase
     protected $sites = [
         SmsSites::VKONTAKTE => [
             'name' => 'vk',
-            'price' => 8,
+            'price' => 10,
         ],
         SmsSites::ODNOKLASSNIKI => [
             'name' => 'od',
-            'price' => 6,
+            'price' => 5,
         ],
         SmsSites::WHATSAPP => [
             'name' => 'wa',
-            'price' => 8,
+            'price' => 3,
         ],
         SmsSites::VIBER => [
             'name' => 'vi',
@@ -32,11 +32,7 @@ class SmsActivateService extends SmsServiceBase
         ],
         SmsSites::TELEGRAM => [
             'name' => 'tg',
-            'price' => 14,
-        ],
-        SmsSites::PERISCOPE => [
-            'name' => 'wb',
-            'price' => 2,
+            'price' => 3,
         ],
         SmsSites::GOOGLE => [
             'name' => 'go',
@@ -54,7 +50,7 @@ class SmsActivateService extends SmsServiceBase
             'name' => 'tw',
             'price' => 1,
         ],
-        SmsSites::TAXI2412 => [
+        SmsSites::UBER => [
             'name' => 'ub',
             'price' => 2,
         ],
@@ -64,29 +60,25 @@ class SmsActivateService extends SmsServiceBase
         ],
         SmsSites::GETTAXI => [
             'name' => 'gt',
-            'price' => 4,
+            'price' => 1,
         ],
-        SmsSites::WEBMONEY => [
+        SmsSites::OLX => [
             'name' => 'sn',
-            'price' => 4,
+            'price' => 2,
         ],
         SmsSites::INSTAGRAM => [
             'name' => 'ig',
-            'price' => 6,
+            'price' => 5,
         ],
         SmsSites::SEOSPRINT => [
             'name' => 'ss',
-            'price' => 2,
-        ],
-        SmsSites::SMART_CALL => [
-            'name' => 'ym',
             'price' => 2,
         ],
         SmsSites::YANDEX => [
             'name' => 'ya',
             'price' => 1,
         ],
-        SmsSites::PURINA_PRO_PLAN => [
+        SmsSites::MAILRU => [
             'name' => 'ma',
             'price' => 2,
         ],
@@ -94,11 +86,11 @@ class SmsActivateService extends SmsServiceBase
             'name' => 'mm',
             'price' => 1,
         ],
-        SmsSites::TALK2 => [
+        SmsSites::IMO => [
             'name' => 'uk',
-            'price' => 2,
+            'price' => 1,
         ],
-        SmsSites::STEAM => [
+        SmsSites::LM => [
             'name' => 'me',
             'price' => 2,
         ],
@@ -239,13 +231,13 @@ class SmsActivateService extends SmsServiceBase
                     break;
                 case 'STATUS_WAIT_RESEND':
                     return [false, null];
-                    //$this->setStatus(self::$METHOD_COMPLETE);
-                    //return ['RETURN', null];
+                //$this->setStatus(self::$METHOD_COMPLETE);
+                //return ['RETURN', null];
                 case 'STATUS_OK':
                     return [true, $code];
                 default:
                     return [false, null];
-                    //throw new SmsException($request);
+                //throw new SmsException($request);
             }
         }
     }

@@ -25,7 +25,8 @@
 Либо запустить
 
 ```
-php composer.phar require --prefer-dist jumper423/yii2-sms "*"
+composer global require "fxp/composer-asset-plugin:^1.2.0"
+composer require --prefer-dist jumper423/yii2-sms "*"
 ```
 
 или добавить

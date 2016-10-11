@@ -214,8 +214,8 @@ class SmsAreaService extends SmsServiceBase
                     break;
                 case 'STATUS_WAIT_RESEND':
                     return [false, null];
-                    //$this->setStatus($this::$METHOD_COMPLETE);
-                    //return ['RETURN', null];
+                //$this->setStatus($this::$METHOD_COMPLETE);
+                //return ['RETURN', null];
                 case 'STATUS_OK':
                 case 'STATUS_ACCESS':
                 case 'STATUS_ACCESS_SCREEN':
@@ -224,7 +224,7 @@ class SmsAreaService extends SmsServiceBase
                     return [false, null];
                 default:
                     return [false, null];
-                    //throw new SmsException($request);
+                //throw new SmsException($request);
             }
         }
     }
