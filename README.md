@@ -1,4 +1,7 @@
-# yii2-sms
+yii2-sms
+========
+[![PHP version](https://badge.fury.io/ph/jumper423%2Fyii2-sms.svg)](https://badge.fury.io/ph/jumper423%2Fyii2-sms)
+
 Приём смс сообщений
 
 Компонент позволяет объединить несколько сервисов по приёму смс сообщений.
